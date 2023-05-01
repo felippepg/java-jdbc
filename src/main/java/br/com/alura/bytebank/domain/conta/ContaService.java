@@ -13,15 +13,20 @@ import java.util.Set;
 
 public class ContaService {
     private ConnectionFactory connectionFactory;
+    private ClienteDAO clienteDAO;
+
 
     public ContaService(){
         this.connectionFactory = new ConnectionFactory();
+        this.clienteDAO = new ClienteDAO(connectionFactory.recuperarConexao());
     };
 
     private Set<Conta> contas = new HashSet<>();
 
     public Set<Conta> listarContasAbertas() {
-        return contas;
+//        Connection con = connectionFactory.recuperarConexao();
+//        ClienteDAO clienteDAO = new ClienteDAO(con);
+        return clienteDAO.show();
     }
 
     public BigDecimal consultarSaldo(Integer numeroDaConta) {
@@ -30,30 +35,9 @@ public class ContaService {
     }
 
     public void abrir(DadosAberturaConta dadosDaConta) {
-        var cliente = new Cliente(dadosDaConta.dadosCliente());
-        var conta = new Conta(dadosDaConta.numero(), cliente);
-        if (contas.contains(conta)) {
-            throw new RegraDeNegocioException("Já existe outra conta aberta com o mesmo número!");
-        }
-
-        Connection con = connectionFactory.recuperarConexao();
-        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
-                "VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, dadosDaConta.numero());
-            preparedStatement.setBigDecimal(2, BigDecimal.ZERO);
-            preparedStatement.setString(3, dadosDaConta.dadosCliente().nome());
-            preparedStatement.setString(4, dadosDaConta.dadosCliente().cpf());
-            preparedStatement.setString(5, dadosDaConta.dadosCliente().email());
-            preparedStatement.execute();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        contas.add(conta);
+//        Connection con = connectionFactory.recuperarConexao();
+//        ClienteDAO clienteDAO = new ClienteDAO(con);
+        clienteDAO.add(dadosDaConta);
     }
 
     public void realizarSaque(Integer numeroDaConta, BigDecimal valor) {
