@@ -7,6 +7,7 @@ Para rodar o projeto é necessário um banco de dados MYSQL (instalado na máqui
 - [x] Inserção de Registros
 - [x] Listagem de registros
 - [x] Exclusão de Registros
+- [x] Consultas com base em parâmetros
 
 ## Aprendizados
 - [x] Configurar um banco de dados em uma aplicação Java

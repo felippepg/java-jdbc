@@ -2,6 +2,7 @@ package br.com.alura.bytebank;
 
 import br.com.alura.bytebank.domain.RegraDeNegocioException;
 import br.com.alura.bytebank.domain.cliente.DadosCadastroCliente;
+import br.com.alura.bytebank.domain.conta.Conta;
 import br.com.alura.bytebank.domain.conta.ContaService;
 import br.com.alura.bytebank.domain.conta.DadosAberturaConta;
 
@@ -14,7 +15,7 @@ public class BytebankApplication {
 
     public static void main(String[] args) {
         var opcao = exibirMenu();
-        while (opcao != 7) {
+        while (opcao != 9) {
             try {
                 switch (opcao) {
                     case 1:
@@ -34,6 +35,12 @@ public class BytebankApplication {
                         break;
                     case 6:
                         realizarDeposito();
+                        break;
+                    case 7:
+                        buscarContaPorNumero();
+                        break;
+                    case 8:
+                        realizarTransferencia();
                         break;
                 }
             } catch (RegraDeNegocioException e) {
@@ -56,7 +63,9 @@ public class BytebankApplication {
                 4 - Consultar saldo de uma conta
                 5 - Realizar saque em uma conta
                 6 - Realizar depósito em uma conta
-                7 - Sair
+                7 - Buscar conta por numero
+                8 - Realizar transferência
+                9 - Sair
                 """);
         return teclado.nextInt();
     }
@@ -136,5 +145,32 @@ public class BytebankApplication {
         System.out.println("Depósito realizado com sucesso!");
         System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
         teclado.next();
+    }
+
+    private static void buscarContaPorNumero() {
+        System.out.println("Digite o número da conta:");
+        var numeroDaConta = teclado.nextInt();
+
+        Conta conta = service.buscarContaPorNumero(numeroDaConta);
+        System.out.println(conta);
+
+        System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
+        teclado.next();
+    }
+
+    private static void realizarTransferencia() {
+        System.out.println("Digite o número da sua conta");
+        var numeroDaMinhaConta = teclado.nextInt();
+        System.out.println("Digite o número da conta destino");
+        var numeroContaDestino = teclado.nextInt();
+        System.out.println("Digite o valor a transferir:");
+        var valor = teclado.nextBigDecimal();
+
+        Boolean resultado = service.realizarTransferencia(numeroDaMinhaConta, numeroContaDestino, valor);
+        if(resultado) {
+            System.out.println("Transferencia realizada com sucesso");
+        } else {
+            System.out.println("Houve um erro");
+        }
     }
 }
