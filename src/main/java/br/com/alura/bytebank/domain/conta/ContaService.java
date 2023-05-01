@@ -67,13 +67,28 @@ public class ContaService {
         contaDAO.realizarDeposito(numeroDaConta, valorAdepositar);
     }
 
-    public void encerrar(Integer numeroDaConta) {
+    public void inativar(Integer numeroDaConta) {
+        ContaDAO contaDAO = new ContaDAO(connectionFactory.recuperarConexao());
+
         var conta = buscarContaPorNumero(numeroDaConta);
         if (conta.possuiSaldo()) {
             throw new RegraDeNegocioException("Conta não pode ser encerrada pois ainda possui saldo!");
         }
 
-        contas.remove(conta);
+        contaDAO.inativar(numeroDaConta);
+
+    }
+
+    public void excluir(Integer numeroDaConta) {
+        ContaDAO contaDAO = new ContaDAO(connectionFactory.recuperarConexao());
+
+        var conta = buscarContaPorNumero(numeroDaConta);
+        if (conta.possuiSaldo()) {
+            throw new RegraDeNegocioException("Conta não pode ser encerrada pois ainda possui saldo!");
+        }
+
+        contaDAO.excluir(numeroDaConta);
+
     }
 
     public Conta buscarContaPorNumero(Integer numero) {

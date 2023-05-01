@@ -15,7 +15,7 @@ public class BytebankApplication {
 
     public static void main(String[] args) {
         var opcao = exibirMenu();
-        while (opcao != 9) {
+        while (opcao != 10) {
             try {
                 switch (opcao) {
                     case 1:
@@ -42,6 +42,8 @@ public class BytebankApplication {
                     case 8:
                         realizarTransferencia();
                         break;
+                    case 9:
+                        excluirConta();
                 }
             } catch (RegraDeNegocioException e) {
                 System.out.println("Erro: " +e.getMessage());
@@ -54,6 +56,7 @@ public class BytebankApplication {
         System.out.println("Finalizando a aplicação.");
     }
 
+
     private static int exibirMenu() {
         System.out.println("""
                 BYTEBANK - ESCOLHA UMA OPÇÃO:
@@ -65,7 +68,8 @@ public class BytebankApplication {
                 6 - Realizar depósito em uma conta
                 7 - Buscar conta por numero
                 8 - Realizar transferência
-                9 - Sair
+                9 - Excluir Efetivamente
+                10 - Sair
                 """);
         return teclado.nextInt();
     }
@@ -103,9 +107,20 @@ public class BytebankApplication {
         System.out.println("Digite o número da conta:");
         var numeroDaConta = teclado.nextInt();
 
-        service.encerrar(numeroDaConta);
+        service.inativar(numeroDaConta);
 
         System.out.println("Conta encerrada com sucesso!");
+        System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
+        teclado.next();
+    }
+
+    private static void excluirConta() {
+        System.out.println("Digite o número da conta:");
+        var numeroDaConta = teclado.nextInt();
+
+        service.excluir(numeroDaConta);
+
+        System.out.println("Conta excluida em definitivo!");
         System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
         teclado.next();
     }
